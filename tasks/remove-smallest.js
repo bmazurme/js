@@ -1,8 +1,22 @@
-function removeSmallest(numbers) {
-  return [];
+function removeSmallest(n, arr) {  
+  while(n > 0) {
+    const current = Math.min(...arr);
+    const index = arr.findIndex((x) => current === x);
+    arr = arr.slice(0, index).concat(arr.slice(index + 1));
+    n--;
+  }
+ 
+  return arr;
 }
-
-console.log(removeSmallest([1, 2, 3, 4, 5]), [2, 3, 4, 5], "Wrong result for [1, 2, 3, 4, 5]");
-console.log(removeSmallest([5, 3, 2, 1, 4]), [5, 3, 2, 4], "Wrong result for [5, 3, 2, 1, 4]");
-console.log(removeSmallest([2, 2, 1, 2, 1]), [2, 2, 2, 1], "Wrong result for [2, 2, 1, 2, 1]");
-console.log(removeSmallest([]), [], "Wrong result for []");
+ 
+// let res = arr.slice(0);
+// while( n-- > 0 ) res.splice(res.indexOf( Math.min(...res) ),1);
+// return res
+ 
+console.log(removeSmallest ((-10), [1,2,3,4,5]) , [1,2,3,4,5]);
+console.log(removeSmallest (0, [1,2,3,4,5]) , [1,2,3,4,5]);
+console.log(removeSmallest (2, [5,3,2,1,4]) , [5,3,4]);
+console.log(removeSmallest (3, [5,3,2,1,4]) , [5,4]);
+console.log(removeSmallest (3, [1,2,3,4,5]) , [4,5]);
+console.log(removeSmallest (5, [1,2,3,4,5]) , []);
+console.log(removeSmallest (9, [1,2,3,4,5]) , []);
