@@ -6,14 +6,15 @@ function differenceOfSquares(n) {
   return val1 * val1 - val2;
 }
  
-//   var sum = 0, squareSum = 0, i;
-//   for (i =1 ; i <= x; i++) {
-//     sum += i*i;
+//   let sum = 0, squareSum = 0, i;
+//   for (i = 1 ; i <= x; i++) {
+//     sum += i * i;
 //     squareSum += i;
 //   }
+//
 //   return squareSum*squareSum - sum;
  
-// differenceOfSquares=x=>x*(x*x-1)*(3*x+2)/12
+// differenceOfSquares = x => x * (x * x - 1) * (3 * x + 2) / 12
  
 console.log(differenceOfSquares(5), 170);
 console.log(differenceOfSquares(10), 2640);
