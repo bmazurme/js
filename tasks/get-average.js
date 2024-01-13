@@ -4,5 +4,3 @@ function getAverage(marks){
 
 console.log(getAverage([2,2,2,2]),2);
 console.log(getAverage([1,5,87,45,8,8]),2);
-
-
