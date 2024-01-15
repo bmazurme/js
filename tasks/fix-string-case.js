@@ -11,8 +11,6 @@ function solve(s){
   return j <= length - j ? s.toLowerCase() : s.toUpperCase();
 }
 
-
-
 console.log(solve('code'),'code');
 console.log(solve('CODe'),'CODE');
 console.log(solve('COde'),'code');
