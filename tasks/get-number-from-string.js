@@ -1,6 +1,7 @@
 function getNumberFromString(s) {
   return Number(s.replace(/\D/g, ''));
 }
+
 // return +s.replace(/\D/g, "");
  
 console.log(getNumberFromString('1'), 1);
