@@ -5,8 +5,9 @@
 /.pnp
 /.idea
 /.next
+/sprint1
 .pnp.js
-
+tasks/get-distance
 # testing
 /coverage
 /dist
