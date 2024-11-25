@@ -29,3 +29,4 @@ yarn-error.log*
 
 request.log
 error.log
+*.txt
