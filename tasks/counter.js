@@ -5,7 +5,7 @@ function counter() {
     return ++count;
   }
 
-  increment.clear = function () {
+  increment.clear = function() {
     count = 0;
     return count;
   }
