@@ -68,7 +68,7 @@ function DFS(graph, start, colors, result) {
 function solve() {
   const initData = new InitData();
   const [n, m] = initData.readLine().map((x) => Number(x));
-  const edges = initData.readArray(m).map(([u, v]) => [+u, +v ]);
+  const edges = initData.readArray(m).map(([u, v]) => [+u, +v]);
   const start = initData.readInt();
   const colors = new Array(n + 1).fill('white');
   const graph = new Array(n + 1).fill(null).map(() => []);
