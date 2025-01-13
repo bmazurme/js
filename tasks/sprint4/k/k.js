@@ -1,84 +1,85 @@
-const _readline = require('readline');
-const fileStream = require('fs').createReadStream('input.txt');
+const readline = require('readline');
+const fs = require('fs');
 
-const _reader = _readline.createInterface({
-  // input: process.stdin
-  input: fileStream
-});
+class InitData {
+  constructor(stream = fs.createReadStream('input.txt')) {
+    this._curLine = 0;
+    this.n = 0;
+    this.m = 0;
+    this.metro = [];
+    this.bus = [];
+    this.stream = stream;
+    this._readline = readline
+      .createInterface({ input: stream })
+      .on('line', (line) => this.set(line));
+  }
 
-const _inputLines = [];
-let _curLine = 0;
+  set(line) {
+    if (this._curLine === 0) {
+      this.n = Number(line);
+    } else if (this._curLine > 0 && this._curLine < this.n + 1) {
+      this.metro.push(line.split(' ').map(Number));
+    } else if (this._curLine === this.n + 1) {
+      this.m = Number(line);
+    } else if (this._curLine > this.n + 1 && this._curLine < this.n + 2 + this.m) {
+      this.bus.push(line.split(' ').map(Number));
+    }
 
-_reader.on('line', line => {
-  _inputLines.push(line);
-});
+    this._curLine++;
+  }
+}
 
-// process.stdin.on('end', solve);
-fileStream.on('end', solve);
+const MAX_DISTANCE = 400;
+const SEGMENT_SIZE = 20;
 
-function getNumber(metro, bus) {
-  let dx = 0;
-  let dy = 0;
-  let max = 0;
-  let result = 0;
+function getSegment([x, y]) {
+  return `${Math.floor(x / SEGMENT_SIZE)},${Math.floor(y / SEGMENT_SIZE)}`;
+}
 
-  for (let i = 0; i < metro.length; i++) {
-    let value = 0;
+function getNumber(metroStations, busStops) {
+  const stopsBySegment = {};
+  let maxCount = 0;
+  let maxSubwayIndex = 0;
 
-    for (let j = 0; j < bus.length; j++) {
-      dx = metro[i][0] - bus[j][0];
-      dy = metro[i][1] - bus[j][1];
+  for (let i = 0; i < busStops.length; i++) {
+    const segment = getSegment(busStops[i]);
 
-      // if (dx > 20 && dx < -20 || dy > 20 && dy < -20) continue;
+    if (!stopsBySegment[segment]) {
+      stopsBySegment[segment] = [];
+    }
+    stopsBySegment[segment].push(busStops[i]);
+  }
 
-      if (dx <= 14 && dx >= -14 && dy <= 14 && dy >= -14) {
-        value += 1;
-      } else if (dx === 20 && dy === 0 || dx === 0 && dy === 20) {
-        value += 1;
-      } else if (dx <= 20 && dx >= -20 || dy <= 20 && dy >= -20) {
-        // const distance = dx ** 2 + dy ** 2;
+  for (let index = 0; index < metroStations.length; index++) {
+    const [segX, segY] = getSegment(metroStations[index]).split(',').map(Number);
+    let count = 0;
 
-        // if (distance <= 400) {
-          value += 1;
-        // }
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        const segment = `${segX + i},${segY + j}`;
+
+        if (stopsBySegment[segment]) {
+          for (let k = 0; k < stopsBySegment[segment].length; k++) {
+            const [sx, sy] = stopsBySegment[segment][k];
+            const [mx, my] = metroStations[index];
+
+            if ((mx - sx) ** 2 + (my - sy) ** 2 <= MAX_DISTANCE) {
+              count += 1;
+            }
+          }
+        }
       }
     }
-    if (value > max) {
-      max = value;
-      result = i;
+
+    if (count > maxCount) {
+      maxCount = count;
+      maxSubwayIndex = index;
     }
   }
 
-  return result + 1;
+  return maxSubwayIndex + 1;
 }
 
-function solve() {
-  const n = readInt();
-  const metro = new Array(10000).fill(1).map((x) => [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]);
-  // const metro = readArray(n);
-  const m = readInt();
-  const bus = new Array(100000).fill(1).map((x) => [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)]);
-  // const bus = readArray(m);
-  console.time();
-  const result = getNumber(metro, bus);
-  console.timeEnd();
-  console.log(result);
-}
-
-function readInt() {
-  const n = Number(_inputLines[_curLine]);
-  _curLine++;
-
-  return n;
-}
-
-function readArray(rows) {
-  const array = [];
-
-  for (let i = 0; i < rows; i++) {
-    array.push(_inputLines[_curLine].trim(' ').split(' ').map((x) => Number(x)));
-    _curLine++;
-  }
-
-  return array;
-}
+const initData = new InitData();
+const solve = () => console.log(getNumber(initData.metro, initData.bus));
+initData.stream.on('end', solve);
